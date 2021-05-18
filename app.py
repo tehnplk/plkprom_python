@@ -2,6 +2,7 @@ import requests
 import mysql.connector
 from datetime import datetime
 import time
+import sys
 
 PLK_HOS = ('10676', '11251', '11252', '11253', '11254', '11255', '11256', '11257', '11455', '11517', '14972')
 
@@ -57,7 +58,9 @@ if __name__ == '__main__':
 
     mycursor = mydb.cursor(dictionary=False)
 
-    sql = f"SELECT cid FROM slot_result where date(plk_date)='2021-05-18'"
+    _date = sys.argv
+    _date = _date[0]
+    sql = f"SELECT cid FROM slot_result where date(plk_date)='{_date}'"
     mycursor.execute(sql)
 
     myresult = mycursor.fetchall()
