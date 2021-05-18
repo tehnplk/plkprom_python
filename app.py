@@ -59,7 +59,7 @@ if __name__ == '__main__':
     mycursor = mydb.cursor(dictionary=False)
 
     _date = sys.argv
-    _date = _date[0]
+    _date = _date[1]
     sql = f"SELECT cid FROM slot_result where date(plk_date)='{_date}'"
     print(sql)
     mycursor.execute(sql)
