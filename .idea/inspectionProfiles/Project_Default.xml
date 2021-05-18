@@ -1,0 +1,29 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="9">
+            <item index="0" class="java.lang.String" itemvalue="getmac" />
+            <item index="1" class="java.lang.String" itemvalue="mysql-connector" />
+            <item index="2" class="java.lang.String" itemvalue="configparser" />
+            <item index="3" class="java.lang.String" itemvalue="requests" />
+            <item index="4" class="java.lang.String" itemvalue="PyMySQL" />
+            <item index="5" class="java.lang.String" itemvalue="pyscard" />
+            <item index="6" class="java.lang.String" itemvalue="pygame" />
+            <item index="7" class="java.lang.String" itemvalue="pyserial" />
+            <item index="8" class="java.lang.String" itemvalue="PyQt5" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyStubPackagesAdvertiser" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <list>
+          <option value="PyQt5-stubs==5.14.2.2" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
