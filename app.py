@@ -61,6 +61,7 @@ if __name__ == '__main__':
     _date = sys.argv
     _date = _date[0]
     sql = f"SELECT cid FROM slot_result where date(plk_date)='{_date}'"
+    print(sql)
     mycursor.execute(sql)
 
     myresult = mycursor.fetchall()
