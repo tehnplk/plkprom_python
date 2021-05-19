@@ -3,8 +3,10 @@ import mysql.connector
 from datetime import datetime
 import time
 import sys
-
-PLK_HOS = ('10676', '11251', '11252', '11253', '11254', '11255', '11256', '11257', '11455', '11517', '14972')
+import threading as th
+import tkinter
+import multiprocessing as mp
+from multiprocessing import Pool
 
 
 def read_token():
@@ -13,7 +15,7 @@ def read_token():
         return token.strip()
 
 
-def slot_check(cid):
+def slot_check(cid, cursor, headers):
     endpoint = f"https://cvp1.moph.go.th/api/ImmunizationTarget?cid={cid}"
     r = requests.get(endpoint, headers=headers, verify=False)
     data = r.json()
@@ -31,29 +33,28 @@ def slot_check(cid):
                 ,t.slot_id = "{slot_id}",t.slot_date = '{slot_date}',t.slot_time = '{slot_time}'
                 ,t.dose = '{dose}',t.plk_result_date = NOW()  where t.cid = '{cid}'
             """
-        if hoscode in PLK_HOS:
-            cursor.execute(sql_update)
-            return ('ok', cid, data)
-        else:
-            return ('not plk', cid, data)
+
+        cursor.execute(sql_update)
+        return ('ok', cid, data)
 
 
     except Exception as err:
         return (cid, "ไม่พบ", err)
 
 
-def plk_list_get_slot(_date):
-    sql = f"SELECT cid FROM slot_result where date(plk_date)='{_date}'"
-    print('thread', sql)
+def plk_list_get_slot(date, cursor, headers):
+    sql = f"SELECT cid FROM slot_result where date(plk_date)='{date}' and slot_id is null"
+    print(f"Thread : {date}", sql)
     cursor.execute(sql)
 
     my_result = cursor.fetchall()
 
     i = 0
     for row in my_result:
-        time.sleep(.5)
         i += 1
-        print(i, slot_check(row[0]))
+        _cid = row[0]
+        print(i, date, slot_check(_cid, cursor, headers))
+        time.sleep(0.5)
 
 
 if __name__ == '__main__':
@@ -62,7 +63,7 @@ if __name__ == '__main__':
     headers = {"Authorization": f"Bearer {token}"}
 
     con = mysql.connector.connect(
-        host="61.19.112.243",
+        host="plkprom.plkhealth.go.th",
         port=3366,
         user="sa",
         password="qazwsxedcr112233",
@@ -70,4 +71,14 @@ if __name__ == '__main__':
     )
     con.autocommit = True
     cursor = con.cursor(dictionary=False)
-    plk_list_get_slot('2021-05-14')
+
+    jobs = []
+    jobs.append(th.Thread(target=plk_list_get_slot('2021-05-18', cursor, headers), daemon=True))
+    jobs.append(th.Thread(target=plk_list_get_slot('2021-05-19', cursor, headers), daemon=True))
+
+    for j in jobs:
+        j.start()
+
+        # Ensure all of the threads have finished
+    for j in jobs:
+        j.join()
