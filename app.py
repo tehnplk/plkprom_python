@@ -32,7 +32,7 @@ def slot_check(cid):
                 ,t.dose = '{dose}',t.plk_result_date = NOW()  where t.cid = '{cid}'
             """
         if hoscode in PLK_HOS:
-            mycursor.execute(sql_update)
+            cursor.execute(sql_update)
             return ('ok', cid, data)
         else:
             return ('not plk', cid, data)
@@ -42,32 +42,32 @@ def slot_check(cid):
         return (cid, "ไม่พบ", err)
 
 
+def plk_list_get_slot(_date):
+    sql = f"SELECT cid FROM slot_result where date(plk_date)='{_date}'"
+    print('thread', sql)
+    cursor.execute(sql)
+
+    my_result = cursor.fetchall()
+
+    i = 0
+    for row in my_result:
+        time.sleep(.5)
+        i += 1
+        print(i, slot_check(row[0]))
+
+
 if __name__ == '__main__':
     requests.urllib3.disable_warnings()
     token = read_token()
     headers = {"Authorization": f"Bearer {token}"}
 
-    mydb = mysql.connector.connect(
+    con = mysql.connector.connect(
         host="61.19.112.243",
         port=3366,
         user="sa",
         password="qazwsxedcr112233",
         database="plkprom"
     )
-    mydb.autocommit = True
-
-    mycursor = mydb.cursor(dictionary=False)
-
-    _date = sys.argv
-    _date = _date[1]
-    sql = f"SELECT cid FROM slot_result where date(plk_date)='{_date}'"
-    print(sql)
-    mycursor.execute(sql)
-
-    myresult = mycursor.fetchall()
-
-    i = 0
-    for x in myresult:
-        time.sleep(.5)
-        i += 1
-        print(i, slot_check(x[0]))
+    con.autocommit = True
+    cursor = con.cursor(dictionary=False)
+    plk_list_get_slot('2021-05-14')
