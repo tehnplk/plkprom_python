@@ -71,14 +71,6 @@ if __name__ == '__main__':
     )
     con.autocommit = True
     cursor = con.cursor(dictionary=False)
-
-    jobs = []
-    jobs.append(th.Thread(target=plk_list_get_slot('2021-05-17', cursor, headers), daemon=True))
-    jobs.append(th.Thread(target=plk_list_get_slot('2021-05-16', cursor, headers), daemon=True))
-
-    for j in jobs:
-        j.start()
-
-        # Ensure all of the threads have finished
-    for j in jobs:
-        j.join()
+    arg = sys.argv
+    _date = arg[1]
+    plk_list_get_slot(_date, cursor, headers)
