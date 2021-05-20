@@ -3,14 +3,17 @@ import mysql.connector
 from datetime import datetime
 import time
 import sys
+import os
 import threading as th
 import tkinter
 import multiprocessing as mp
 from multiprocessing import Pool
 
+token_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'token.txt')
+
 
 def read_token():
-    with open("token.txt", "r") as f:
+    with open(token_file, "r") as f:
         token = f.read()
         return token.strip()
 
