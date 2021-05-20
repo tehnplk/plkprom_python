@@ -54,7 +54,7 @@ def plk_list_get_slot(date, cursor, headers):
         i += 1
         _cid = row[0]
         print(i, date, slot_check(_cid, cursor, headers))
-        time.sleep(0.5)
+        time.sleep(0.1)
 
 
 if __name__ == '__main__':
