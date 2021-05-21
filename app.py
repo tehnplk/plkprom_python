@@ -29,10 +29,10 @@ def slot_check(cid, cursor, headers):
         app_type = data['appointment_type']
         dose = data['dose']
 
-        sql_update = f""" update slot_result t set  t.hoscode = '{hoscode}',t.hosname='{hosname}(โดย-{app_type})' 
-                ,t.slot_id = "{slot_id}",t.slot_date = '{slot_date}',t.slot_time = '{slot_time}'
-                ,t.dose = '{dose}',t.plk_result_date = NOW()  where t.cid = '{cid}'
-            """
+        sql_update = f""" update slot_result t set  t.hoscode = '{hoscode}',t.hosname='{hosname}' 
+                        ,t.slot_id = "{slot_id}",t.slot_date = '{slot_date}',t.slot_time = '{slot_time}'
+                        ,t.dose = '{dose}',t.plk_result_date = NOW() ,t.book_type = '{book_type}'  where t.cid = '{cid}'
+                    """
 
         cursor.execute(sql_update)
         return ('ok', cid, data)
